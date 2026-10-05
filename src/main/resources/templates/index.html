@@ -1,0 +1,604 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>DeployFlow | User Management</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f7fb;
+            color: #172033;
+        }
+
+        /* Navbar */
+        .navbar {
+            height: 70px;
+            background: #111827;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 7%;
+        }
+
+        .logo {
+            font-size: 23px;
+            font-weight: 700;
+        }
+
+        .logo span {
+            color: #6366f1;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .nav-links a:hover {
+            color: white;
+        }
+
+        .jenkins-status {
+            background: #143d2a;
+            color: #4ade80;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #22c55e;
+            border-radius: 50%;
+            margin-right: 7px;
+        }
+
+        /* Container */
+        .container {
+            width: 86%;
+            max-width: 1200px;
+            margin: 40px auto;
+        }
+
+        /* Hero */
+        .hero {
+            background: linear-gradient(135deg, #111827, #312e81);
+            border-radius: 20px;
+            padding: 40px;
+            color: white;
+            margin-bottom: 25px;
+            box-shadow: 0 15px 35px rgba(31, 41, 55, 0.15);
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.12);
+            color: #c7d2fe;
+            padding: 7px 13px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-bottom: 15px;
+        }
+
+        .hero h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        .hero p {
+            color: #dbeafe;
+            line-height: 1.7;
+            font-size: 15px;
+        }
+
+        /* Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 360px 1fr;
+            gap: 25px;
+        }
+
+        /* Cards */
+        .card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.04);
+        }
+
+        .card h2 {
+            font-size: 20px;
+            margin-bottom: 7px;
+        }
+
+        .card-subtitle {
+            color: #64748b;
+            font-size: 13px;
+            margin-bottom: 22px;
+        }
+
+        /* Form */
+        .form-group {
+            margin-bottom: 17px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 7px;
+            color: #334155;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 13px;
+            border: 1px solid #dbe2ea;
+            border-radius: 9px;
+            outline: none;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .form-group input:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 9px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            background: #6366f1;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #4f46e5;
+        }
+
+        /* User Table */
+        .user-count {
+            background: #eef2ff;
+            color: #4f46e5;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #f8fafc;
+            color: #64748b;
+            font-size: 12px;
+            text-transform: uppercase;
+            text-align: left;
+            padding: 14px 15px;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #eef2f7;
+            font-size: 14px;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .id {
+            color: #6366f1;
+            font-weight: 700;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .email {
+            color: #64748b;
+        }
+
+        .avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: #e0e7ff;
+            color: #4f46e5;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            margin-right: 9px;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 45px 20px;
+            color: #94a3b8;
+        }
+
+        .empty-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        /* Jenkins Info */
+        .jenkins-info {
+            margin-top: 25px;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 16px;
+            padding: 22px;
+        }
+
+        .jenkins-info h3 {
+            margin-bottom: 10px;
+            font-size: 17px;
+        }
+
+        .pipeline {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .pipeline-step {
+            background: #f1f5f9;
+            padding: 8px 13px;
+            border-radius: 7px;
+            font-weight: 600;
+        }
+
+        .arrow {
+            color: #6366f1;
+            font-weight: bold;
+        }
+
+        footer {
+            text-align: center;
+            padding: 35px 0 20px;
+            color: #94a3b8;
+            font-size: 13px;
+        }
+
+        @media (max-width: 850px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 29px;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .container {
+                width: 92%;
+            }
+
+            .hero {
+                padding: 28px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+
+    <div class="logo">
+        Deploy<span>Flow</span>
+    </div>
+
+    <div class="nav-links">
+        <a href="/">Dashboard</a>
+        <a href="/users">Users API</a>
+
+        <div class="jenkins-status">
+            <span class="dot"></span>
+            Jenkins Ready
+        </div>
+    </div>
+
+</nav>
+
+
+<main class="container">
+
+    <!-- Hero -->
+    <section class="hero">
+
+        <span class="badge">
+            SPRING BOOT + THYMELEAF + MYSQL + JENKINS
+        </span>
+
+        <h1>
+            User Management Dashboard
+        </h1>
+
+        <p>
+            Create users and view users directly from this Thymeleaf
+            application. This application is being used to practice
+            Jenkins CI/CD automation.
+        </p>
+
+    </section>
+
+
+    <!-- Main Content -->
+    <section class="content-grid">
+
+        <!-- Create User -->
+        <div class="card">
+
+            <h2>
+                Create User
+            </h2>
+
+            <p class="card-subtitle">
+                Add a new user to the database.
+            </p>
+
+            <form th:action="@{/user}" method="post">
+
+                <div class="form-group">
+
+                    <label for="name">
+                        Full Name
+                    </label>
+
+                    <input
+                            type="text"
+                            id="name"
+                            name="name"
+                            placeholder="Enter user's name"
+                            required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="email">
+                        Email Address
+                    </label>
+
+                    <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="Enter user's email"
+                            required
+                    >
+
+                </div>
+
+
+                <button type="submit" class="btn btn-primary">
+                    + Create User
+                </button>
+
+            </form>
+
+        </div>
+
+
+        <!-- Users -->
+        <div class="card">
+
+            <div class="table-header">
+
+                <div>
+                    <h2>
+                        Users
+                    </h2>
+
+                    <p class="card-subtitle">
+                        Users currently stored in MySQL
+                    </p>
+                </div>
+
+                <span class="user-count"
+                      th:text="${users != null ? users.size() : 0} + ' Users'">
+                    0 Users
+                </span>
+
+            </div>
+
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                    <tr>
+                        <th>ID</th>
+                        <th>User</th>
+                        <th>Email</th>
+                    </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                    <!-- Dynamic users -->
+                    <tr th:each="user : ${users}">
+
+                        <td class="id"
+                            th:text="${user.id}">
+                            1
+                        </td>
+
+                        <td>
+
+                            <span class="avatar"
+                                  th:text="${#strings.substring(user.name, 0, 1).toUpperCase()}">
+                                P
+                            </span>
+
+                            <span class="user-name"
+                                  th:text="${user.name}">
+                                Paras Yadav
+                            </span>
+
+                        </td>
+
+                        <td class="email"
+                            th:text="${user.email}">
+                            paras@example.com
+                        </td>
+
+                    </tr>
+
+
+                    <!-- Empty state -->
+                    <tr th:if="${users == null or users.isEmpty()}">
+
+                        <td colspan="3">
+
+                            <div class="empty">
+
+                                <div class="empty-icon">
+                                    👤
+                                </div>
+
+                                <div>
+                                    No users found
+                                </div>
+
+                                <small>
+                                    Create your first user using the form.
+                                </small>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- Jenkins Pipeline -->
+    <section class="jenkins-info">
+
+        <h3>
+            🔧 Jenkins CI/CD Pipeline
+        </h3>
+
+        <div class="pipeline">
+
+            <span class="pipeline-step">
+                Git Checkout
+            </span>
+
+            <span class="arrow">→</span>
+
+            <span class="pipeline-step">
+                Maven Build
+            </span>
+
+            <span class="arrow">→</span>
+
+            <span class="pipeline-step">
+                Test
+            </span>
+
+            <span class="arrow">→</span>
+
+            <span class="pipeline-step">
+                Package
+            </span>
+
+            <span class="arrow">→</span>
+
+            <span class="pipeline-step">
+                Deploy
+            </span>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<footer>
+    Built with Spring Boot + Thymeleaf + MySQL + Jenkins
+    <br>
+    CI/CD Testing Application
+</footer>
+
+</body>
+
+</html>
+
