@@ -9,6 +9,34 @@
     <title>DeployFlow CI/CD Pipeline | User Management</title>
 
     <style>
+        .jenkins-about {
+            margin-top: 25px;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.04);
+        }
+        .jenkins-about h3 { font-size: 18px; margin-bottom: 10px; }
+        .jenkins-about p { color: #475569; font-size: 14px; line-height: 1.7; margin-bottom: 12px; }
+        .jenkins-about ul { margin: 0 0 14px 20px; color: #475569; font-size: 14px; line-height: 1.8; }
+        .demo-title { font-size: 14px; font-weight: 600; margin: 18px 0 8px; color: #334155; }
+        .console {
+            background: #0f172a;
+            color: #cbd5e1;
+            border-radius: 12px;
+            padding: 18px 20px;
+            font-family: Consolas, "Courier New", monospace;
+            font-size: 12.5px;
+            line-height: 1.7;
+            overflow-x: auto;
+            white-space: pre;
+        }
+        .console .ok { color: #4ade80; font-weight: 700; }
+        .console .step { color: #818cf8; }
+        .demo-note { color: #94a3b8; font-size: 12px; margin-top: 8px; }
+    </style>
+    <style>
         * {
             margin: 0;
             padding: 0;
@@ -590,6 +618,57 @@
 
     </section>
 
+    <section class="jenkins-about">
+
+        <h3>What is Jenkins?</h3>
+
+        <p>
+            Jenkins is an open-source automation server used for CI/CD
+            (Continuous Integration and Continuous Delivery). It watches your code,
+            and every time something changes it automatically builds, tests and
+            deploys the application, so nobody has to repeat those steps by hand.
+        </p>
+
+        <ul>
+            <li><b>Automates the pipeline:</b> checkout, build, test, package and deploy.</li>
+            <li><b>Catches problems early:</b> a broken build is found right after a commit.</li>
+            <li><b>Pipeline as code:</b> the steps can be stored in a Jenkinsfile alongside your project.</li>
+            <li><b>Plugin ecosystem:</b> Git, Maven, Docker, Kubernetes and Tomcat deployment all plug in.</li>
+        </ul>
+
+        <p>
+            In this project, Jenkins pulls the code, builds the WAR file with Maven
+            and deploys it to Tomcat under the /javawebapp context.
+        </p>
+
+        <div class="demo-title">Demo: what a Jenkins run looks like (text)</div>
+
+        <pre class="console">
+<span class="step">Stage 1 - Git Checkout</span>
+Started by user Paras
+Cloning repository from GitHub ...
+Checked out branch: main
+
+<span class="step">Stage 2 - Maven Build</span>
+Running: mvn clean install
+Compiling source files ...
+Packaging: SpringBootJenkins-0.0.1-SNAPSHOT.war
+BUILD SUCCESS
+
+<span class="step">Stage 3 - Deploy to Tomcat</span>
+Deploying WAR to Tomcat with context path: javawebapp
+Undeploying old version ...
+Deploying new version ...
+
+<span class="ok">Finished: SUCCESS</span>
+</pre>
+
+        <p class="demo-note">
+            Sample output for illustration. Your real logs are in
+            Jenkins &rarr; your job &rarr; Console Output.
+        </p>
+
+    </section>
 </main>
 
 
