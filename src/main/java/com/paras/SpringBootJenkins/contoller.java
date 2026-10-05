@@ -17,6 +17,7 @@ public class contoller {
     @Autowired
     contoller(repo r) {
         this.r = r;
+
     }
 
     @GetMapping("/")
