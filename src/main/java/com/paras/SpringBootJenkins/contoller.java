@@ -19,7 +19,7 @@ public class contoller {
         this.r = r;
     }
 
-    @GetMapping("")
+    @GetMapping("/")
     public String show(Model model) {
 
         List<model> users = r.findAll();
