@@ -40,7 +40,6 @@ public class contoller {
     @GetMapping("/users")
     @ResponseBody
     public List<model> getusers() {
-
         return r.findAll();
     }
 }
